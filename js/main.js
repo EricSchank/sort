@@ -64,15 +64,25 @@ function sort($, data) {
     draw: function(container){
       var c = (typeof container === 'undefined' ? $(that.container) : $(container));
       c.empty();
-      var settled = that.algorithm.max;
       for(var i = 0; i < data.length; i += 1) {
-        c.append('<div class="bar ' + (i >= settled ? 'settled' : '') + '" style="width: ' + (data[i] * 2) + 'em;"></div>');
+        var settled = '';
+        if(typeof that.algorithm !== 'undefined' && typeof that.algorithm.isSettled !== 'undefined' && that.algorithm.isSettled(i)){
+          settled = 'settled';
+        }
+        c.append('<div class="bar ' + settled + '" style="width: ' + (data[i] * 2) + 'em;"></div>');
+      }
+      if(typeof that.algorithm.stepCount !== 'undefined'){
+        $('#step_count').html(that.algorithm.stepCount);
       }
     },
 
     algorithm: function(algorithm){
       that.algorithm = algorithm;
       that.algorithm.setData(data);
+      $('#sort_name').html(algorithm.name);
+      $('#best_complexity').html(algorithm.bestComplexity);
+      $('#avg_complexity').html(algorithm.avgComplexity);
+      $('#worst_complexity').html(algorithm.worstComplexity);
     },
 
     checkDone: function(){
@@ -128,41 +138,79 @@ function sort($, data) {
 
 var bubble = function(){
   var that = {
+    name: "Bubble Sort",
+    bestComplexity: "O( n )",
+    avgComplexity: 'O( n<span class="superscript">2</span> )',
+    worstComplexity: 'O( n<span class="superscript">2</span> )',
+    
     idx: 0,
     max: 0,
+    lastSwap: 0,
     iterationDone: false,
     data: [],
+    stepCount: 0,
 
     swap: function(left, right) {
       var temp = that.data[right];
       that.data[right] = that.data[left];
       that.data[left] = temp;
+      that.lastSwap = right;
+    },
+
+    isSettled: function(index) {
+      return (index >= that.max);
     },
 
     resetIteration: function() {
       that.iterationDone = false;
     },
 
+    isFinished: function(){
+      return (that.max <= 1);
+    },
+
+    onFinished: function(){
+      that.iterationDone = true;
+    },
+
+    isIterationDone: function(){
+      return (that.idx >= that.max);
+    },
+
+    onIterationDone: function(){
+      that.idx = 0;
+      that.max = that.lastSwap;
+      that.lastSwap = 0;
+      that.iterationDone = true;
+    },
+
+    onIterationInProg: function(){
+      that.iterationDone = false;
+    },
+
+    onStepDone: function(){
+      that.idx += 1;
+      that.stepCount += 1;
+    },
+
     step: function(){
-      if(that.max <= 1) {
-        that.iterationDone = true;
+      if(that.isFinished()) {
+        that.onFinished();
         return true;
       }
 
-      if(that.idx >= that.max) {
-        that.idx = 0;
-        that.max -= 1;
-        that.iterationDone = true;
+      if(that.isIterationDone()) {
+        that.onIterationDone();
         return false;
       } else {
-        that.iterationDone = false;
+        that.onIterationInProg();
       }
 
       if(that.data[that.idx] > that.data[that.idx + 1]) {
         that.swap(that.idx, that.idx + 1);
       }
 
-      that.idx += 1;
+      that.onStepDone();
 
       return false;
     },
@@ -172,6 +220,94 @@ var bubble = function(){
       this.iterationDone = false;
       this.max = data.length;
       this.idx = 0;
+      this.stepCount = 0;
+      this.lastSwap = 0;
+    }
+  };  
+
+  return that;
+};
+
+
+var insertion = function(){
+  var that = {
+    name: "Insertion Sort",
+    bestComplexity: "O( n )",
+    avgComplexity: 'O( n<span class="superscript">2</span> )',
+    worstComplexity: 'O( n<span class="superscript">2</span> )',
+    
+    x: 0,
+    min: 0,
+    y: 0,
+    lastSwap: 0,
+    iterationDone: false,
+    data: [],
+    stepCount: 0,
+
+    swap: function(left, right) {
+      var temp = that.data[right];
+      that.data[right] = that.data[left];
+      that.data[left] = temp;
+    },
+
+    isSettled: function(index) {
+      return (index < that.x);
+    },
+
+    resetIteration: function() {
+      that.iterationDone = false;
+    },
+
+    isFinished: function(){
+      return (that.x >= that.data.length);
+    },
+
+    onFinished: function(){
+      that.iterationDone = true;
+    },
+
+    isIterationDone: function(){
+      return (that.y >= that.data.length);
+    },
+
+    onIterationDone: function(){
+      that.swap(that.min, that.x);
+      that.x += 1;
+      that.iterationDone = true;
+      that.y = that.x;
+      that.min = that.x;
+    },
+
+    step: function(){
+      if(that.isFinished()) {
+        that.onFinished();
+        return true;
+      }
+
+      if(that.isIterationDone()) {
+        that.onIterationDone();
+        return false;
+      } else {
+        that.iterationDone = false;
+      }
+
+      if(that.data[that.min] > that.data[that.y]) {
+        that.min = that.y;
+      }
+
+      that.y += 1;
+      that.stepCount += 1;
+
+      return false;
+    },
+
+    setData: function(data) {
+      this.data = data;
+      this.iterationDone = false;
+      this.min = 0;
+      this.x = 0;
+      this.stepCount = 0;
+      this.y = 0;
     }
   };  
 
@@ -181,7 +317,8 @@ var bubble = function(){
 var s = window.sort = sort(jQuery, []);
 s.setContainer('#container');
 s.init();
-s.algorithm(bubble());
+// s.algorithm(bubble());
+s.algorithm(insertion());
 s.draw();
 jQuery('#step_link').on('click', s.step);
 jQuery('#iter_link').on('click', s.iteration);

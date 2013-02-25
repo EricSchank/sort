@@ -116,24 +116,10 @@ textarea {
     background-color: #117711;
 }
 
-
-.width1 {
-    width: 1em;
+.superscript {
+    font-size: 0.7em;
+    vertical-align: top;
 }
-.width2 {
-    width: 2em;
-}
-.width3 {
-    width: 3em;
-}
-.width4 {
-    width: 4em;
-}
-.width5 {
-    width: 5em;
-}
-
-
 
 
 
