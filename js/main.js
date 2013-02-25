@@ -1,7 +1,7 @@
 function sort($, data) {
   var data = (typeof data === 'undefined' ? [] : data);
   var that = {
-    algorithm: null,
+    algorithm: {},
     finished: false,
     interval: 250,
     entireSort: false,
@@ -26,7 +26,7 @@ function sort($, data) {
       for(var i = 0; i < that.rowCount; i += 1){
         data.push(generateItem(i));
       }
-      if(typeof that.algorithm.data !== 'undefined'){
+      if(that.algorithm && typeof that.algorithm.data !== 'undefined'){
         that.algorithm.setData(data);
       }
       // $(that.container).find('.bar').removeClass('settled');
@@ -76,7 +76,7 @@ function sort($, data) {
       }
     },
 
-    algorithm: function(algorithm){
+    setAlgorithm: function(algorithm){
       that.algorithm = algorithm;
       that.algorithm.setData(data);
       $('#sort_name').html(algorithm.name);
@@ -318,12 +318,15 @@ var s = window.sort = sort(jQuery, []);
 s.setContainer('#container');
 s.init();
 // s.algorithm(bubble());
-s.algorithm(insertion());
+s.setAlgorithm(insertion());
 s.draw();
 jQuery('#step_link').on('click', s.step);
 jQuery('#iter_link').on('click', s.iteration);
 jQuery('#run_link').on('click', s.run);
+
 jQuery('#random_link').on('click', s.randomize);
 jQuery('#best_link').on('click', s.best);
 jQuery('#worst_link').on('click', s.worst);
 
+jQuery('#bubble_link').on('click', function(){s.setAlgorithm(bubble());});
+jQuery('#insertion_link').on('click', function(){s.setAlgorithm(insertion());});
