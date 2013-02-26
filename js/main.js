@@ -43,7 +43,7 @@ function sort($, data) {
 
     best: function(){
       that.newDataSet(function(i){ 
-        return i * that.expand; 
+        return (i + 1) * that.expand;
       });
     },
 
@@ -229,10 +229,10 @@ var bubble = function(){
 };
 
 
-var insertion = function(){
+var gnomeInsertion = function(){
   var that = {
-    name: "Insertion Sort",
-    bestComplexity: "O( n )",
+    name: "Gnome-Insertion Sort",
+    bestComplexity: 'O( n<span class="superscript">2</span> )',
     avgComplexity: 'O( n<span class="superscript">2</span> )',
     worstComplexity: 'O( n<span class="superscript">2</span> )',
     
@@ -314,6 +314,88 @@ var insertion = function(){
   return that;
 };
 
+var insertion = function(){
+  var that = {
+    name: "Insertion Sort",
+    bestComplexity: "O( n )",
+    avgComplexity: 'O( n<span class="superscript">2</span> )',
+    worstComplexity: 'O( n<span class="superscript">2</span> )',
+
+    i: 1,
+    slot: 1,
+    iterationDone: false,
+    data: [],
+    stepCount: 0,
+
+    swap: function(left, right) {
+      var temp = that.data[right];
+      that.data[right] = that.data[left];
+      that.data[left] = temp;
+    },
+
+    isSettled: function(index) {
+      return (index < that.i - 1);
+    },
+
+    resetIteration: function() {
+      that.iterationDone = false;
+    },
+
+    isFinished: function(){
+      return (that.i >= that.data.length);
+    },
+
+    onFinished: function(){
+      that.iterationDone = true;
+    },
+
+    isIterationDone: function(){
+      return (that.slot <= 0 || that.val >= that.data[that.slot - 1]);
+    },
+
+    onIterationDone: function(){
+      that.data[that.slot] = that.val;
+      that.iterationDone = true;
+      that.i += 1;
+      that.val = that.data[that.i];
+      that.slot = that.i;
+      that.stepCount += 1;
+    },
+
+    step: function(){
+      if(that.isFinished()) {
+        that.onFinished();
+        return true;
+      }
+
+      if(that.isIterationDone()) {
+        that.onIterationDone();
+        return false;
+      } else {
+        that.iterationDone = false;
+      }
+
+      that.data[that.slot] = that.data[that.slot - 1];
+      that.slot -= 1;
+
+      that.stepCount += 1;
+
+      return false;
+    },
+
+    setData: function(data) {
+      this.data = data;
+      this.iterationDone = false;
+      this.stepCount = 0;
+      this.i = 1;
+      this.val = this.data[this.i];
+      this.slot = this.i;
+    }
+  };
+
+  return that;
+};
+
 var s = window.sort = sort(jQuery, []);
 s.setContainer('#container');
 s.init();
@@ -329,4 +411,5 @@ jQuery('#best_link').on('click', s.best);
 jQuery('#worst_link').on('click', s.worst);
 
 jQuery('#bubble_link').on('click', function(){s.setAlgorithm(bubble());});
+jQuery('#gnome_insertion_link').on('click', function(){s.setAlgorithm(gnomeInsertion());});
 jQuery('#insertion_link').on('click', function(){s.setAlgorithm(insertion());});
