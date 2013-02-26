@@ -35,7 +35,7 @@ function sort($, data) {
     },
 
     randomize: function(){
-      var max = that.rowCount * that.expand;
+      var max = that.rowCount;
       that.newDataSet(function(i){
         return Math.floor((Math.random() * max) + 1);
       });
@@ -43,13 +43,13 @@ function sort($, data) {
 
     best: function(){
       that.newDataSet(function(i){ 
-        return (i + 1) * that.expand;
+        return (i + 1);
       });
     },
 
     worst: function(){
       that.newDataSet(function(i){ 
-        return (that.rowCount - i) * that.expand; 
+        return (that.rowCount - i); 
       });
     },
 
@@ -69,7 +69,7 @@ function sort($, data) {
         if(typeof that.algorithm !== 'undefined' && typeof that.algorithm.isSettled !== 'undefined' && that.algorithm.isSettled(i)){
           settled = 'settled';
         }
-        c.append('<div class="bar ' + settled + '" style="width: ' + (data[i] * 2) + 'em;"></div>');
+        c.append('<div class="bar ' + settled + '" style="width: ' + (data[i] * 2 * that.expand) + 'em;">' + data[i] + '</div>');
       }
       if(typeof that.algorithm.stepCount !== 'undefined'){
         $('#step_count').html(that.algorithm.stepCount);

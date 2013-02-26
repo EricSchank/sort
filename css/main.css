@@ -106,6 +106,8 @@ textarea {
     /*background-color: #FE7200;*/
     height: 1em;
     margin: 2px 0;
+    color: #FFFFFF;
+    padding: 0 0 5px 10px;
 }
 
 .bar.settled {
