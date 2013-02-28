@@ -4,6 +4,7 @@ var bubble = function(){
     bestComplexity: "O( n )",
     avgComplexity: 'O( n<span class="superscript">2</span> )',
     worstComplexity: 'O( n<span class="superscript">2</span> )',
+    source: 'https://github.com/EricSchank/sort/blob/master/js/algorithms/bubble.js',
     
     idx: 0,
     max: 0,

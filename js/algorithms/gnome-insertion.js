@@ -4,7 +4,8 @@ var gnomeInsertion = function(){
     bestComplexity: 'O( n<span class="superscript">2</span> )',
     avgComplexity: 'O( n<span class="superscript">2</span> )',
     worstComplexity: 'O( n<span class="superscript">2</span> )',
-    
+    source: 'https://github.com/EricSchank/sort/blob/master/js/algorithms/gnome-insertion.js',
+
     x: 0,
     min: 0,
     y: 0,

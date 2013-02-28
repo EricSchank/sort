@@ -4,6 +4,7 @@ var insertion = function(){
     bestComplexity: "O( n )",
     avgComplexity: 'O( n<span class="superscript">2</span> )',
     worstComplexity: 'O( n<span class="superscript">2</span> )',
+    source: 'https://github.com/EricSchank/sort/blob/master/js/algorithms/insertion.js',
 
     i: 1,
     slot: 1,
