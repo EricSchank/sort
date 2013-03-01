@@ -1,3 +1,25 @@
+var countView = function(that) {
+  return {
+    draw: function(){
+      if(typeof that.algorithm.stepCount !== 'undefined'){
+        $('#step_count').html(that.algorithm.stepCount);
+      }
+    }
+  };
+};
+
+var infoView = function(algorithm){
+  return {
+    draw: function(){
+      $('#sort_name').html(algorithm.name);
+      $('#best_complexity').html(algorithm.bestComplexity);
+      $('#avg_complexity').html(algorithm.avgComplexity);
+      $('#worst_complexity').html(algorithm.worstComplexity);
+      $('#source_code').replaceWith('<a href="' + algorithm.source + '" id="source_code">Sample Source Code for ' + algorithm.name + '</a>');
+    }
+  };
+};
+
 function sort($, data) {
   var data = (typeof data === 'undefined' ? [] : data);
   var that = {
@@ -57,33 +79,46 @@ function sort($, data) {
       return data;
     },
 
+    registerListeners: function(){
+      jQuery('#step_link').on('click', that.step);
+      jQuery('#iter_link').on('click', that.iteration);
+      jQuery('#run_link').on('click', that.run);
+
+      jQuery('#random_link').on('click', that.randomize);
+      jQuery('#best_link').on('click', that.best);
+      jQuery('#worst_link').on('click', that.worst);
+
+      jQuery('#bubble_link').on('click', function(){that.setAlgorithm(bubble());});
+      jQuery('#gnome_insertion_link').on('click', function(){that.setAlgorithm(gnomeInsertion());});
+      jQuery('#insertion_link').on('click', function(){that.setAlgorithm(insertion());});
+    },
+
     setContainer: function(container){
       that.container = $(container);
+      that.countView = countView(that);
+      that.registerListeners();
+    },
+
+    isSettled: function(i){
+      return (typeof that.algorithm !== 'undefined' && 
+              typeof that.algorithm.isSettled !== 'undefined' && 
+              that.algorithm.isSettled(i));
     },
 
     draw: function(container){
       var c = (typeof container === 'undefined' ? $(that.container) : $(container));
       c.empty();
       for(var i = 0; i < data.length; i += 1) {
-        var settled = '';
-        if(typeof that.algorithm !== 'undefined' && typeof that.algorithm.isSettled !== 'undefined' && that.algorithm.isSettled(i)){
-          settled = 'settled';
-        }
+        var settled = that.isSettled(i) ? 'settled' : '';
         c.append('<div class="bar ' + settled + '" style="width: ' + (data[i] * 2 * that.expand) + 'em;">' + data[i] + '</div>');
       }
-      if(typeof that.algorithm.stepCount !== 'undefined'){
-        $('#step_count').html(that.algorithm.stepCount);
-      }
+      that.countView.draw();
     },
 
     setAlgorithm: function(algorithm){
       that.algorithm = algorithm;
       that.algorithm.setData(data);
-      $('#sort_name').html(algorithm.name);
-      $('#best_complexity').html(algorithm.bestComplexity);
-      $('#avg_complexity').html(algorithm.avgComplexity);
-      $('#worst_complexity').html(algorithm.worstComplexity);
-      $('#source_code').replaceWith('<a href="' + algorithm.source + '" id="source_code">Sample Source Code for ' + algorithm.name + '</a>');
+      infoView(algorithm).draw();
     },
 
     checkDone: function(){
@@ -144,14 +179,3 @@ s.init();
 // s.algorithm(bubble());
 s.setAlgorithm(insertion());
 s.draw();
-jQuery('#step_link').on('click', s.step);
-jQuery('#iter_link').on('click', s.iteration);
-jQuery('#run_link').on('click', s.run);
-
-jQuery('#random_link').on('click', s.randomize);
-jQuery('#best_link').on('click', s.best);
-jQuery('#worst_link').on('click', s.worst);
-
-jQuery('#bubble_link').on('click', function(){s.setAlgorithm(bubble());});
-jQuery('#gnome_insertion_link').on('click', function(){s.setAlgorithm(gnomeInsertion());});
-jQuery('#insertion_link').on('click', function(){s.setAlgorithm(insertion());});
