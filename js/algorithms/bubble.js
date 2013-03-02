@@ -9,32 +9,13 @@ var bubble = function(){
     
     idx: 0,
     max: 0,
-    lastSwap: 0,
-    iterationDone: false,
-    data: [],
-    stepCount: 0,
-
-    swap: function(left, right) {
-      var temp = that.data[right];
-      that.data[right] = that.data[left];
-      that.data[left] = temp;
-      that.lastSwap = right;
-    },
 
     isSettled: function(index) {
       return (index >= that.max);
     },
 
-    resetIteration: function() {
-      that.iterationDone = false;
-    },
-
     isFinished: function(){
       return (that.max <= 1);
-    },
-
-    onFinished: function(){
-      that.iterationDone = true;
     },
 
     isIterationDone: function(){
@@ -89,6 +70,6 @@ var bubble = function(){
     }
   };  
 
-  return that;
+  return _.extend(that, algorithm());
 };
 window.sort.registerAlgorithm(bubble());

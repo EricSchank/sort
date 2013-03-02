@@ -9,30 +9,13 @@ var insertion = function(){
 
     i: 1,
     slot: 1,
-    iterationDone: false,
-    data: [],
-    stepCount: 0,
-
-    swap: function(left, right) {
-      var temp = that.data[right];
-      that.data[right] = that.data[left];
-      that.data[left] = temp;
-    },
 
     isSettled: function(index) {
       return (index < that.i - 1);
     },
 
-    resetIteration: function() {
-      that.iterationDone = false;
-    },
-
     isFinished: function(){
       return (that.i >= that.data.length);
-    },
-
-    onFinished: function(){
-      that.iterationDone = true;
     },
 
     isIterationDone: function(){
@@ -79,6 +62,6 @@ var insertion = function(){
     }
   };
 
-  return that;
+  return _.extend(that, algorithm());
 };
 window.sort.registerAlgorithm(insertion());

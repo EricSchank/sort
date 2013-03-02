@@ -10,31 +10,13 @@ var gnomeInsertion = function(){
     x: 0,
     min: 0,
     y: 0,
-    lastSwap: 0,
-    iterationDone: false,
-    data: [],
-    stepCount: 0,
-
-    swap: function(left, right) {
-      var temp = that.data[right];
-      that.data[right] = that.data[left];
-      that.data[left] = temp;
-    },
 
     isSettled: function(index) {
       return (index < that.x);
     },
 
-    resetIteration: function() {
-      that.iterationDone = false;
-    },
-
     isFinished: function(){
       return (that.x >= that.data.length);
-    },
-
-    onFinished: function(){
-      that.iterationDone = true;
     },
 
     isIterationDone: function(){
@@ -82,6 +64,8 @@ var gnomeInsertion = function(){
     }
   };  
 
-  return that;
+
+
+  return _.extend(that, algorithm());
 };
 window.sort.registerAlgorithm(gnomeInsertion());
