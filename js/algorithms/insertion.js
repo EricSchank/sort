@@ -1,6 +1,7 @@
 var insertion = function(){
   var that = {
     name: "Insertion Sort",
+    id: "insertion_link",
     bestComplexity: "O( n )",
     avgComplexity: 'O( n<span class="superscript">2</span> )',
     worstComplexity: 'O( n<span class="superscript">2</span> )',
@@ -80,3 +81,4 @@ var insertion = function(){
 
   return that;
 };
+window.sort.registerAlgorithm(insertion());

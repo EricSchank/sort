@@ -1,6 +1,7 @@
 var gnomeInsertion = function(){
   var that = {
     name: "Gnome-Insertion Sort",
+    id: "gnome_insertion_link",
     bestComplexity: 'O( n<span class="superscript">2</span> )',
     avgComplexity: 'O( n<span class="superscript">2</span> )',
     worstComplexity: 'O( n<span class="superscript">2</span> )',
@@ -83,3 +84,4 @@ var gnomeInsertion = function(){
 
   return that;
 };
+window.sort.registerAlgorithm(gnomeInsertion());

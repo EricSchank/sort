@@ -1,9 +1,48 @@
-var countView = function(that) {
+var countView = function(sorter) {
   return {
     draw: function(){
-      if(typeof that.algorithm.stepCount !== 'undefined'){
-        $('#step_count').html(that.algorithm.stepCount);
+      if(typeof sorter.algorithm.stepCount !== 'undefined'){
+        $('#step_count').html(sorter.algorithm.stepCount);
       }
+    }
+  };
+};
+
+var barsView = function(sorter, container) {
+  return {
+    container: (typeof container === 'undefined' ? $(sorter.container) : $(container)),
+    draw: function(data){
+      this.container.empty();
+      for(var i = 0; i < data.length; i += 1) {
+        var settled = sorter.isSettled(i) ? 'settled' : '';
+        this.container.append('<div class="bar ' + settled + '" style="width: ' + (data[i] * 2 * sorter.expand) + 'em;">' + data[i] + '</div>');
+      }
+    }
+  };
+};
+
+var algorithmsView = function(sorter) {
+  return {
+    drawAlgorithm: function(idx, algor){
+      if(idx > 0){
+        $('#algorithm_list').append(' &bull; ');
+      }
+
+      var link = $('#algorithm_list').append('<a href="#" class="algorithm-link" id="' + algor.id + '">' + algor.name + '</a>');
+
+      link.on('click', '#' + algor.id, function(){
+        window.sort.setAlgorithm(algor);
+      });
+    },
+
+    unbind: function(idx, algor){
+      $('#' + algor.id).off('click');
+    },
+
+    draw: function(){
+      $.each(sorter.algors, this.unbind);
+      $('#algorithm_list').empty();
+      $.each(sorter.algors, this.drawAlgorithm);
     }
   };
 };
@@ -24,6 +63,7 @@ function sort($, data) {
   var data = (typeof data === 'undefined' ? [] : data);
   var that = {
     algorithm: {},
+    algors: [],
     finished: false,
     interval: 250,
     entireSort: false,
@@ -79,6 +119,14 @@ function sort($, data) {
       return data;
     },
 
+    registerAlgorithm: function(algor){
+      if(that.algors.length == 0){
+        that.setAlgorithm(algor);
+      }
+      that.algors.push(algor);
+      that.algorithmsView.draw();
+    },
+
     registerListeners: function(){
       jQuery('#step_link').on('click', that.step);
       jQuery('#iter_link').on('click', that.iteration);
@@ -87,16 +135,16 @@ function sort($, data) {
       jQuery('#random_link').on('click', that.randomize);
       jQuery('#best_link').on('click', that.best);
       jQuery('#worst_link').on('click', that.worst);
-
-      jQuery('#bubble_link').on('click', function(){that.setAlgorithm(bubble());});
-      jQuery('#gnome_insertion_link').on('click', function(){that.setAlgorithm(gnomeInsertion());});
-      jQuery('#insertion_link').on('click', function(){that.setAlgorithm(insertion());});
     },
 
     setContainer: function(container){
       that.container = $(container);
       that.countView = countView(that);
+      that.barsView = barsView(that, container);
+      that.algorithmsView = algorithmsView(that);
       that.registerListeners();
+      that.init();
+      that.draw();
     },
 
     isSettled: function(i){
@@ -106,13 +154,9 @@ function sort($, data) {
     },
 
     draw: function(container){
-      var c = (typeof container === 'undefined' ? $(that.container) : $(container));
-      c.empty();
-      for(var i = 0; i < data.length; i += 1) {
-        var settled = that.isSettled(i) ? 'settled' : '';
-        c.append('<div class="bar ' + settled + '" style="width: ' + (data[i] * 2 * that.expand) + 'em;">' + data[i] + '</div>');
-      }
+      that.barsView.draw(data);
       that.countView.draw();
+      that.algorithmsView.draw();
     },
 
     setAlgorithm: function(algorithm){
@@ -169,13 +213,10 @@ function sort($, data) {
 
   that.init = that.worst;
 
+  window.sort = that;
   return that;
 };
 
 
 var s = window.sort = sort(jQuery, []);
 s.setContainer('#container');
-s.init();
-// s.algorithm(bubble());
-s.setAlgorithm(insertion());
-s.draw();

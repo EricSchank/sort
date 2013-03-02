@@ -1,6 +1,7 @@
 var bubble = function(){
   var that = {
     name: "Bubble Sort",
+    id: "bubble_link",
     bestComplexity: "O( n )",
     avgComplexity: 'O( n<span class="superscript">2</span> )',
     worstComplexity: 'O( n<span class="superscript">2</span> )',
@@ -90,3 +91,4 @@ var bubble = function(){
 
   return that;
 };
+window.sort.registerAlgorithm(bubble());
