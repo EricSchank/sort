@@ -70,6 +70,7 @@ var bubble = function(){
       this.idx = 0;
       this.stepCount = 0;
       this.lastSwap = 0;
+      $.publish("sort:reset", data);
     }
   };  
 

@@ -32,7 +32,6 @@ function sort($, data) {
       }
       // $(that.container).find('.bar').removeClass('settled');
       that.checkDone();
-      that.draw(true);
     },
 
     randomize: function(){
@@ -83,7 +82,6 @@ function sort($, data) {
       that.algorithmsView = algorithmsView(that);
       that.registerListeners();
       that.init();
-      that.draw(true);
     },
 
     isSettled: function(i){
@@ -120,7 +118,6 @@ function sort($, data) {
       that.finished = false;
       that.checkDone();
       that.algorithm.setData(data);
-      that.draw(true);
     },
 
     step: function(){

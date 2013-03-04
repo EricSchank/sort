@@ -65,6 +65,7 @@ var gnomeInsertion = function(){
       this.x = 0;
       this.stepCount = 0;
       this.y = 0;
+      $.publish("sort:reset", data);
     }
   };  
 

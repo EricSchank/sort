@@ -64,6 +64,7 @@ var insertion = function(){
       this.i = 1;
       this.val = this.data[this.i];
       this.slot = this.i;
+      $.publish("sort:reset", data);
     }
   };
 

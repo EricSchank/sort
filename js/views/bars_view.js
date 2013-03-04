@@ -6,11 +6,13 @@ var barsView = function(sorter, container) {
       return (value * 2 * sorter.expand) + 'em';
     },
 
-    draw: function(data){
-      this.container.empty();
+    draw: function(){
+      var args = Array.prototype.slice.call(arguments);
+      var data = args.slice(1);
+      that.container.empty();
       for(var i = 0; i < data.length; i += 1) {
         var settled = sorter.isSettled(i) ? 'settled' : '';
-        this.container.append('<div class="bar ' + settled + '" style="width: ' + that.itemWidth(data[i]) +'">' + data[i] + '</div>');
+        that.container.append('<div class="bar ' + settled + '" style="width: ' + that.itemWidth(data[i]) +'">' + data[i] + '</div>');
       }
     },
 
@@ -44,5 +46,6 @@ var barsView = function(sorter, container) {
   $.subscribe("item:swapped", that.itemSwapped);
   $.subscribe("item:settled", that.itemSettled);
   $.subscribe("sort:finished", that.sortFinished);
+  $.subscribe("sort:reset", that.draw);
   return that;
 };
