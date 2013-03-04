@@ -27,6 +27,8 @@ var bubble = function(){
       that.max = that.lastSwap;
       that.lastSwap = 0;
       that.iterationDone = true;
+      $.publish("iteration:done");
+      $.publish("item:settled", that.max);
     },
 
     onIterationInProg: function(){
@@ -51,6 +53,7 @@ var bubble = function(){
         that.onIterationInProg();
       }
 
+      $.publish("item:progress", that.idx + 1);
       if(that.data[that.idx] > that.data[that.idx + 1]) {
         that.swap(that.idx, that.idx + 1);
       }

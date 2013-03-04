@@ -24,11 +24,13 @@ var insertion = function(){
 
     onIterationDone: function(){
       that.data[that.slot] = that.val;
+      // $.publish("item:settled", that.i - 1);
       that.iterationDone = true;
       that.i += 1;
       that.val = that.data[that.i];
       that.slot = that.i;
       that.stepCount += 1;
+      $.publish("iteration:done");
     },
 
     step: function(){
@@ -44,7 +46,10 @@ var insertion = function(){
         that.iterationDone = false;
       }
 
-      that.data[that.slot] = that.data[that.slot - 1];
+
+      that.swap(that.slot, that.slot - 1);
+      $.publish("item:progress", that.slot - 1);
+      // that.data[that.slot] = that.data[that.slot - 1];
       that.slot -= 1;
 
       that.stepCount += 1;

@@ -118,6 +118,10 @@ textarea {
     background-color: #117711;
 }
 
+.bar.item-progress {
+    background-color: #000;
+}
+
 .superscript {
     font-size: 0.7em;
     vertical-align: top;

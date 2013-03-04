@@ -25,10 +25,12 @@ var gnomeInsertion = function(){
 
     onIterationDone: function(){
       that.swap(that.min, that.x);
+      $.publish("item:settled", that.x);
       that.x += 1;
       that.iterationDone = true;
       that.y = that.x;
       that.min = that.x;
+      $.publish("iteration:done");
     },
 
     step: function(){
@@ -43,6 +45,8 @@ var gnomeInsertion = function(){
       } else {
         that.iterationDone = false;
       }
+
+      $.publish("item:progress", that.y);
 
       if(that.data[that.min] > that.data[that.y]) {
         that.min = that.y;

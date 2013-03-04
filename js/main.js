@@ -32,7 +32,7 @@ function sort($, data) {
       }
       // $(that.container).find('.bar').removeClass('settled');
       that.checkDone();
-      that.draw();
+      that.draw(true);
     },
 
     randomize: function(){
@@ -83,7 +83,7 @@ function sort($, data) {
       that.algorithmsView = algorithmsView(that);
       that.registerListeners();
       that.init();
-      that.draw();
+      that.draw(true);
     },
 
     isSettled: function(i){
@@ -92,8 +92,10 @@ function sort($, data) {
               that.algorithm.isSettled(i));
     },
 
-    draw: function(container){
-      that.barsView.draw(data);
+    draw: function(drawBars){
+      if(drawBars){
+        that.barsView.draw(data);
+      }
       that.countView.draw();
       that.algorithmsView.draw();
     },
@@ -101,7 +103,7 @@ function sort($, data) {
     setAlgorithm: function(algorithm){
       that.algorithm = algorithm;
       that.algorithm.setData(data);
-      infoView(algorithm).draw();
+      infoView(algorithm).draw(true);
     },
 
     checkDone: function(){
@@ -118,7 +120,7 @@ function sort($, data) {
       that.finished = false;
       that.checkDone();
       that.algorithm.setData(data);
-      that.draw();
+      that.draw(true);
     },
 
     step: function(){

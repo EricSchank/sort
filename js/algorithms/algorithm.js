@@ -10,14 +10,18 @@ var algorithm = function(){
       this.data[right] = this.data[left];
       this.data[left] = temp;
       this.lastSwap = right;
+      $.publish("item:swapped", [left, right]);
     },
 
     resetIteration: function() {
       this.iterationDone = false;
+      $.publish("iteration:reset");
     },
 
     onFinished: function(){
       this.iterationDone = true;
+      $.publish("iteration:done");
+      $.publish("sort:finished");
     },
   };  
 
