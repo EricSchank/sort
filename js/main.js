@@ -63,7 +63,7 @@ function sort($, data) {
         that.setAlgorithm(algor);
       }
       that.algors.push(algor);
-      that.algorithmsView.draw();
+      $.publish("sort:algorithm:new", that.algors);
     },
 
     registerListeners: function(){
@@ -80,7 +80,6 @@ function sort($, data) {
       that.container = $(container);
       $.publish("sort:reset", data);
       that.barsView = barsView(that, container);
-      that.algorithmsView = algorithmsView(that);
       that.registerListeners();
       that.init();
     },
@@ -89,13 +88,6 @@ function sort($, data) {
       return (typeof that.algorithm !== 'undefined' && 
               typeof that.algorithm.isSettled !== 'undefined' && 
               that.algorithm.isSettled(i));
-    },
-
-    draw: function(drawBars){
-      // if(drawBars){
-      //   that.barsView.draw(data);
-      // }
-      that.algorithmsView.draw();
     },
 
     setAlgorithm: function(algorithm){
@@ -122,7 +114,6 @@ function sort($, data) {
 
     step: function(){
       that.finished = that.algorithm.step();
-      that.draw();
       that.checkDone();
       if(((that.algorithm.iterationDone && !that.entireSort) || that.finished) && typeof that.timer !== 'undefined'){
         that.clearTimer();

@@ -1,5 +1,7 @@
 var algorithmsView = function(sorter) {
-  return {
+  var that = {
+    algors: [],
+
     drawAlgorithm: function(idx, algor){
       if(idx > 0){
         $('#algorithm_list').append(' &bull; ');
@@ -17,9 +19,17 @@ var algorithmsView = function(sorter) {
     },
 
     draw: function(){
-      $.each(sorter.algors, this.unbind);
+      var args = Array.prototype.slice.call(arguments);
+      var algors = args.slice(1);
+      $.each(that.algors, that.unbind);
       $('#algorithm_list').empty();
-      $.each(sorter.algors, this.drawAlgorithm);
+      $.each(algors, that.drawAlgorithm);
+      that.algors = algors;
     }
   };
+
+  $.subscribe("sort:algorithm:new", that.draw);
+
+  return that;
 };
+window.sort.views.push(algorithmsView());
