@@ -38,6 +38,7 @@ var bubble = function(){
     onStepDone: function(){
       that.idx += 1;
       that.stepCount += 1;
+      $.publish("sort:step:finished", that.stepCount);
     },
 
     step: function(){

@@ -54,6 +54,7 @@ var gnomeInsertion = function(){
 
       that.y += 1;
       that.stepCount += 1;
+      $.publish("sort:step:finished", that.stepCount);
 
       return false;
     },

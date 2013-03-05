@@ -78,7 +78,7 @@ function sort($, data) {
 
     setContainer: function(container){
       that.container = $(container);
-      that.countView = countView(that);
+      $.publish("sort:reset", data);
       that.barsView = barsView(that, container);
       that.algorithmsView = algorithmsView(that);
       that.registerListeners();
@@ -92,10 +92,9 @@ function sort($, data) {
     },
 
     draw: function(drawBars){
-      if(drawBars){
-        that.barsView.draw(data);
-      }
-      that.countView.draw();
+      // if(drawBars){
+      //   that.barsView.draw(data);
+      // }
       that.algorithmsView.draw();
     },
 

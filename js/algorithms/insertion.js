@@ -31,6 +31,8 @@ var insertion = function(){
       that.slot = that.i;
       that.stepCount += 1;
       $.publish("iteration:done");
+      $.publish("sort:step:finished", that.stepCount);
+      $.publish("item:progress", that.slot - 1);
     },
 
     step: function(){
@@ -53,6 +55,7 @@ var insertion = function(){
       that.slot -= 1;
 
       that.stepCount += 1;
+      $.publish("sort:step:finished", that.stepCount);
 
       return false;
     },
