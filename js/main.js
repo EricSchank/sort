@@ -8,6 +8,7 @@ function sort($, data) {
     entireSort: false,
     rowCount: 10,
     expand: 3,
+    views: [],
 
     clearTimer: function(){
       if(that.timer){
@@ -101,7 +102,7 @@ function sort($, data) {
     setAlgorithm: function(algorithm){
       that.algorithm = algorithm;
       that.algorithm.setData(data);
-      infoView(algorithm).draw(true);
+      $.publish("sort:algorithm", algorithm);
     },
 
     checkDone: function(){
