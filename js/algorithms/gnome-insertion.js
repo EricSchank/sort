@@ -11,10 +11,6 @@ var gnomeInsertion = function(){
     min: 0,
     y: 0,
 
-    isSettled: function(index) {
-      return (index < that.x);
-    },
-
     isFinished: function(){
       return (that.x >= that.data.length);
     },

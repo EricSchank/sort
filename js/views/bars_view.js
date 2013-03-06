@@ -11,8 +11,7 @@ var barsView = function(sorter, container) {
       var data = args.slice(1);
       that.container.empty();
       for(var i = 0; i < data.length; i += 1) {
-        var settled = sorter.isSettled(i) ? 'settled' : '';
-        that.container.append('<div class="bar ' + settled + '" style="width: ' + that.itemWidth(data[i]) +'">' + data[i] + '</div>');
+        that.container.append('<div class="bar" style="width: ' + that.itemWidth(data[i]) +'">' + data[i] + '</div>');
       }
     },
 

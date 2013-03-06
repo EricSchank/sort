@@ -31,7 +31,6 @@ function sort($, data) {
       if(that.algorithm && typeof that.algorithm.data !== 'undefined'){
         that.algorithm.setData(data);
       }
-      // $(that.container).find('.bar').removeClass('settled');
       that.checkDone();
     },
 
@@ -82,12 +81,6 @@ function sort($, data) {
       that.barsView = barsView(that, container);
       that.registerListeners();
       that.init();
-    },
-
-    isSettled: function(i){
-      return (typeof that.algorithm !== 'undefined' && 
-              typeof that.algorithm.isSettled !== 'undefined' && 
-              that.algorithm.isSettled(i));
     },
 
     setAlgorithm: function(algorithm){

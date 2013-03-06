@@ -10,10 +10,6 @@ var insertion = function(){
     i: 1,
     slot: 1,
 
-    isSettled: function(index) {
-      return (index < that.i - 1);
-    },
-
     isFinished: function(){
       return (that.i >= that.data.length);
     },

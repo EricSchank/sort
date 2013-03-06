@@ -10,10 +10,6 @@ var bubble = function(){
     idx: 0,
     max: 0,
 
-    isSettled: function(index) {
-      return (index >= that.max);
-    },
-
     isFinished: function(){
       return (that.max <= 1);
     },
