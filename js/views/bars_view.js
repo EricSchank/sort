@@ -6,12 +6,16 @@ var barsView = function(sorter, container) {
       return (value * 2 * sorter.expand) + 'em';
     },
 
+    drawItem: function(value){
+      return '<div class="bar" style="width: ' + that.itemWidth(value) +'">' + value + '</div>';
+    },
+
     draw: function(){
       var args = Array.prototype.slice.call(arguments);
       var data = args.slice(1);
       that.container.empty();
       for(var i = 0; i < data.length; i += 1) {
-        that.container.append('<div class="bar" style="width: ' + that.itemWidth(data[i]) +'">' + data[i] + '</div>');
+        that.container.append(that.drawItem(data[i]));
       }
     },
 
@@ -24,6 +28,11 @@ var barsView = function(sorter, container) {
       leftItem.css('width', that.itemWidth(rightVal));
       rightItem.html(leftVal);
       rightItem.css('width', that.itemWidth(leftVal));
+    },
+
+    itemChanged: function(e, idx, newVal){
+      var item = $(".bar").slice(idx, (idx + 1));
+      item.replaceWith(that.drawItem(newVal));
     },
 
     itemProgress: function(e, item){
@@ -43,6 +52,7 @@ var barsView = function(sorter, container) {
 
   $.subscribe("item:progress", that.itemProgress);
   $.subscribe("item:swapped", that.itemSwapped);
+  $.subscribe("item:changed", that.itemChanged);
   $.subscribe("item:settled", that.itemSettled);
   $.subscribe("sort:finished", that.sortFinished);
   $.subscribe("sort:reset", that.draw);
