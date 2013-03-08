@@ -22,7 +22,22 @@ var merge = function(){
     },
 
     isIterationDone: function(){
-      return (that.i >= that.data.length);
+      return (that.i >= that.data.length) && that.isInnerDone();
+    },
+
+    isInnerDone: function(){
+      return (that.j >= that.end);
+    },
+
+    onInnerDone: function(init){
+      that.right = Math.min(that.i + that.width, that.data.length);
+      that.end = Math.min(that.i + 2 * that.width, that.data.length);
+      that.one = that.i;
+      that.two = that.right;
+      that.j = that.i;
+      if(!init){
+        that.i += (2 * that.width);
+      }
     },
 
     onIterationDone: function(){
@@ -31,30 +46,23 @@ var merge = function(){
       that.i = 0;
       that.updateFromWorking();
 
-      // that.data[that.slot] = that.val;
-      // that.i += 1;
-      // that.val = that.data[that.i];
-      // that.slot = that.i;
       that.stepCount += 1;
       $.publish("iteration:done");
       $.publish("sort:step:finished", that.stepCount);
-      // $.publish("item:progress", that.slot - 1);
     },
 
-    merge: function(right, end){
-      var one = that.i;
-      var two = right;
-      for(var j = that.i; j < end; j += 1){
-        if(one < right && (two >= end || that.data[one] <= that.data[two])){
-          that.work[j] = that.data[one];
-          one += 1;
-        } else {
-          that.work[j] = that.data[two];
-          two += 1;
-        }
-        that.stepCount += 1;
-        $.publish("sort:step:finished", that.stepCount);
+    merge: function(){
+      if(that.one < that.right && (that.two >= that.end || that.data[that.one] <= that.data[that.two])){
+        that.work[that.j] = that.data[that.one];
+        that.one += 1;
+      } else {
+        that.work[that.j] = that.data[that.two];
+        that.two += 1;
       }
+      that.stepCount += 1;
+      $.publish("sort:step:finished", that.stepCount);
+      $.publish("item:changed", [that.j, that.work[that.j]]);
+      that.j += 1;
     },
 
     step: function(){
@@ -70,17 +78,11 @@ var merge = function(){
         that.iterationDone = false;
       }
 
-      that.merge(Math.min(that.i + that.width, that.data.length), Math.min(that.i + 2 * that.width, that.data.length));
+      if(that.isInnerDone()) {
+        that.onInnerDone();
+      }
 
-      // that.swap(that.slot, that.slot - 1);
-      // $.publish("item:progress", that.slot - 1);
-      // that.data[that.slot] = that.data[that.slot - 1];
-      // that.slot -= 1;
-
-      that.i += (2 * that.width);
-
-      that.stepCount += 1;
-      $.publish("sort:step:finished", that.stepCount);
+      that.merge();
 
       return false;
     },
@@ -92,6 +94,7 @@ var merge = function(){
       that.stepCount = 0;
       that.width = 1;
       that.i = 0;
+      that.onInnerDone();
       $.publish("sort:reset", data);
     }
   };
