@@ -3,11 +3,7 @@ var algorithmsView = function(sorter) {
     algors: [],
 
     drawAlgorithm: function(idx, algor){
-      if(idx > 0){
-        $('#algorithm_list').append(' &bull; ');
-      }
-
-      var link = $('#algorithm_list').append('<a href="#" class="algorithm-link" id="' + algor.id + '">' + algor.name + '</a>');
+      var link = $('#algorithm_list').append('<a href="#" class="algorithm-link btn" id="' + algor.id + '">' + algor.name + '</a>');
 
       link.on('click', '#' + algor.id, function(){
         window.sort.setAlgorithm(algor);
@@ -24,6 +20,9 @@ var algorithmsView = function(sorter) {
       $.each(that.algors, that.unbind);
       $('#algorithm_list').empty();
       $.each(algors, that.drawAlgorithm);
+      if($('#algorithm_list .active').size() === 0) {
+        $('#algorithm_list .btn:first').addClass('active');
+      }
       that.algors = algors;
     }
   };
