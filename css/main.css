@@ -186,8 +186,13 @@ textarea {
     vertical-align: top;
 }
 
+.info-block a {
+  margin-left: 7px;
+}
 
-
+.info-block i {
+  vertical-align: middle;
+}
 
 
 

@@ -80,6 +80,7 @@ function sort($, data) {
       $.publish("sort:reset", data);
       that.barsView = barsView(that, container);
       that.registerListeners();
+      $('.info-block a').tooltip({placement:'right'});
       that.init();
     },
 
